@@ -39,5 +39,5 @@ jobs:
         run: docker-compose up -d
 
 env:
-  GRAFANA_USER: ${{ secrets.GRAFANA_USER }}
-  GRAFANA_PASS: ${{ secrets.GRAFANA_PASS }}
+  GF_SECURITY_ADMIN_USER: ${{ secrets.GF_SECURITY_ADMIN_USER }}
+  GF_SECURITY_ADMIN_PASSWORD: ${{ secrets.GF_SECURITY_ADMIN_PASSWORD }}

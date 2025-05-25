@@ -31,6 +31,3 @@ services:
 networks:
   monitoring_net:
     driver: bridge
-
-volumes:
-  grafana-storage:
