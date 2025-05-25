@@ -34,6 +34,9 @@ jobs:
     steps:
       - name: Checkout repo on self-hosted runner
         uses: actions/checkout@v3
+
+      - name: Stop and remove existing containers
+        run: docker-compose down
         
       - name: Pull updated image
         run: docker-compose pull
