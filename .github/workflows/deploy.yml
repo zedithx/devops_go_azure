@@ -32,8 +32,8 @@ jobs:
     runs-on: [self-hosted]
 
     steps:
-      - name: Change directory to project
-        run: cd /devops_go_azure
+      - name: Checkout repo on self-hosted runner
+        uses: actions/checkout@v3
         
       - name: Pull updated image
         run: docker-compose pull
