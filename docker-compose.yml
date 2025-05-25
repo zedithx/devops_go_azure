@@ -12,16 +12,16 @@ services:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
-    env_file:
-      - .env
+    environment:
+      - GF_SECURITY_ADMIN_USER=${{ secrets.GF_SECURITY_ADMIN_USER }}
+      - GF_SECURITY_ADMIN_PASSWORD=${{ secrets.GF_SECURITY_ADMIN_PASSWORD }}
     networks:
       - monitoring_net
     volumes:
       - grafana-storage:/var/lib/grafana
 
   metric_service:
-    build: 
-      context: ./
+    image: ghcr.io/zedithx/devops_go_azure:latest
     ports:
       - "8080:8080"                           # expose your Go app port
     restart: unless-stopped
@@ -31,3 +31,6 @@ services:
 networks:
   monitoring_net:
     driver: bridge
+
+volumes:
+  grafana-storage:

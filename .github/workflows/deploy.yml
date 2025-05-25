@@ -1,0 +1,43 @@
+name: CI/CD Deployment to Azure VM
+
+on:
+  push:
+    branches:
+      - main
+
+# Use github hosted runner to perform the building of image
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Image
+        run: docker build -t ghcr.io/${{ github.repository_owner }}/devops_go_azure:latest .
+
+      - name: Push Image
+        run: docker push ghcr.io/${{ github.repository_owner }}/devops_go_azure:latest
+
+# Used local runner of azure vm (already connected) to pull and deploy using the image
+  deploy:
+    needs: build
+    runs-on: [self-hosted]
+
+    steps:
+      - name: Pull updated image
+        run: docker-compose pull
+
+      - name: Restart services
+        run: docker-compose up -d
+
+env:
+  GRAFANA_USER: ${{ secrets.GRAFANA_USER }}
+  GRAFANA_PASS: ${{ secrets.GRAFANA_PASS }}
